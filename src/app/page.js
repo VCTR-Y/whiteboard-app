@@ -5,8 +5,10 @@ import Ribbon from "./components/Ribbon";
 export default function Home() {
     const canvasRef = useRef(null);
     const drawingColorRef = useRef("Black");
+    const strokeWidthRef = useRef(1);
     const [drawingColor, setDrawingColor] = useState("Black"); 
-    // const [eraserMode, setEraserMode] = useState(false);
+    const [eraserMode, setEraserMode] = useState(false);
+    const [strokeWidth, setStrokeWidth] = useState(1);
 
     const clearCanvas = () => {
       const canvas = canvasRef.current;
@@ -40,6 +42,8 @@ export default function Home() {
         if (isDrawing) {
           ctx.lineTo(e.offsetX, e.offsetY);
           ctx.strokeStyle = drawingColorRef.current;
+          ctx.lineWidth = strokeWidthRef.current;
+          ctx.lineCap = 'round';
           ctx.stroke();
         }
       };
@@ -66,12 +70,20 @@ export default function Home() {
     }, []);
 
     useEffect(() => {
-      drawingColorRef.current = drawingColor;
-    }, [drawingColor]);
+      if (eraserMode) {
+        drawingColorRef.current = "White";
+      } else {
+        drawingColorRef.current = drawingColor;
+      }
+    }, [drawingColor, eraserMode]);
+
+    useEffect(() => {
+      strokeWidthRef.current = strokeWidth;
+    }, [strokeWidth]);
 
   return (
     <div className="h-screen flex flex-col">
-      <Ribbon setDrawingColor={setDrawingColor} clearCanvas={clearCanvas} />
+      <Ribbon setDrawingColor={setDrawingColor} clearCanvas={clearCanvas} eraserMode={eraserMode} setEraserMode={setEraserMode} strokeWidth={strokeWidth} setStrokeWidth={setStrokeWidth}/>
       <canvas ref={canvasRef}></canvas>
     </div>
   );
