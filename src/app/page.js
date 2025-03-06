@@ -53,17 +53,19 @@ export default function Home() {
         isDrawing = false;
       };
 
-      // Add event listeners
-      canvas.addEventListener('mousedown', startDrawing);
-      canvas.addEventListener('mousemove', draw);
-      canvas.addEventListener('mouseup', stopDrawing);
-      canvas.addEventListener('mouseout', stopDrawing);
+      // Add event listeners  
+      canvas.addEventListener("pointerdown", startDrawing);
+      canvas.addEventListener("pointermove", draw);
+      canvas.addEventListener("pointerup", stopDrawing);
+      canvas.addEventListener("pointercancel", stopDrawing);
+      canvas.addEventListener("pointerout", stopDrawing);
 
       return () => {
-        canvas.removeEventListener('mousedown', startDrawing);
-        canvas.removeEventListener('mousemove', draw);
-        canvas.removeEventListener('mouseup', stopDrawing);
-        canvas.removeEventListener('mouseout', stopDrawing);
+        canvas.removeEventListener('pointerdown', startDrawing);
+        canvas.removeEventListener('pointermove', draw);
+        canvas.removeEventListener('pointerup', stopDrawing);
+        canvas.removeEventListener('pointercancel', stopDrawing);
+        canvas.removeEventListener('pointerout', stopDrawing);
       };
 
       }
@@ -84,7 +86,7 @@ export default function Home() {
   return (
     <div className="h-screen flex flex-col">
       <Ribbon setDrawingColor={setDrawingColor} clearCanvas={clearCanvas} eraserMode={eraserMode} setEraserMode={setEraserMode} strokeWidth={strokeWidth} setStrokeWidth={setStrokeWidth}/>
-      <canvas ref={canvasRef}></canvas>
+      <canvas ref={canvasRef} style={{touchaction: 'none'}}></canvas>
     </div>
   );
 }
